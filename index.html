@@ -22,18 +22,17 @@
         </header>
 
         <main>
-            <!-- Quick Item Lookup -->
-            <section class="lookup-section">
-                <h2>Quick Item Lookup</h2>
-                <div class="search-container">
-                    <input type="text" id="itemSearch" placeholder="Search for an item..." autocomplete="off">
-                    <div class="search-results" id="searchResults"></div>
+            <!-- Product Grid -->
+            <section class="products-section">
+                <h2>Widdle Off-Woad Products</h2>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here -->
                 </div>
             </section>
 
-            <!-- Add Item Section -->
-            <section class="add-item-section">
-                <h2>Add Item</h2>
+            <!-- Quick Add Section -->
+            <section class="quick-add-section">
+                <h2>Quick Add Custom Item</h2>
                 <div class="form-group">
                     <input type="text" id="itemName" placeholder="Item name" autocomplete="off">
                 </div>
@@ -43,7 +42,7 @@
                 <div class="form-group">
                     <input type="number" id="itemQuantity" placeholder="Quantity" min="1" value="1">
                 </div>
-                <button id="addItemBtn" class="btn btn-primary">Add Item</button>
+                <button id="addItemBtn" class="btn btn-primary">Add Custom Item</button>
             </section>
 
             <!-- Items List -->

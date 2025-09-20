@@ -7,6 +7,7 @@ class PricingCalculator {
         
         this.initializeEventListeners();
         this.updateDisplay();
+        this.loadProductGrid();
     }
 
     async loadProducts() {
@@ -22,6 +23,32 @@ class PricingCalculator {
                 { name: "WOW Essentials Pack", price: 25.00 }
             ];
         }
+    }
+
+    loadProductGrid() {
+        const productsGrid = document.getElementById('productsGrid');
+        if (!productsGrid) return;
+
+        // Wait for products to load
+        setTimeout(() => {
+            productsGrid.innerHTML = this.predefinedItems.map((product, index) => `
+                <div class="product-card" data-product-id="${index}">
+                    <div class="product-image" data-product-id="${index}">
+                        <!-- Product image placeholder -->
+                    </div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="product-quantity">
+                        <button class="quantity-btn" onclick="pricingApp.decreaseQuantity(${index})">-</button>
+                        <span class="quantity-display" id="qty-${index}">1</span>
+                        <button class="quantity-btn" onclick="pricingApp.increaseQuantity(${index})">+</button>
+                    </div>
+                    <button class="add-btn" onclick="pricingApp.addProductToCart(${index})">
+                        Add to Cart
+                    </button>
+                </div>
+            `).join('');
+        }, 100);
     }
 
     initializeEventListeners() {
@@ -49,18 +76,7 @@ class PricingCalculator {
             }
         });
 
-        // Search functionality
-        const searchInput = document.getElementById('itemSearch');
-        searchInput.addEventListener('input', (e) => {
-            this.handleSearch(e.target.value);
-        });
-
-        // Clear search when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
-                this.hideSearchResults();
-            }
-        });
+        // No search functionality needed for visual grid
 
         // Clear all button
         document.getElementById('clearAllBtn').addEventListener('click', () => {
@@ -129,52 +145,7 @@ class PricingCalculator {
         }
     }
 
-    handleSearch(query) {
-        const searchResults = document.getElementById('searchResults');
-        
-        if (query.length < 2) {
-            this.hideSearchResults();
-            return;
-        }
-
-        const results = this.predefinedItems.filter(item =>
-            item.name.toLowerCase().includes(query.toLowerCase())
-        );
-
-        if (results.length === 0) {
-            this.hideSearchResults();
-            return;
-        }
-
-        this.showSearchResults(results);
-    }
-
-    showSearchResults(results) {
-        const searchResults = document.getElementById('searchResults');
-        searchResults.innerHTML = '';
-
-        results.forEach(item => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'search-result-item';
-            resultItem.innerHTML = `
-                <div class="search-result-name">${item.name}</div>
-                <div class="search-result-price">$${item.price.toFixed(2)}</div>
-            `;
-            
-            resultItem.addEventListener('click', () => {
-                this.addPredefinedItem(item);
-            });
-            
-            searchResults.appendChild(resultItem);
-        });
-
-        searchResults.style.display = 'block';
-    }
-
-    hideSearchResults() {
-        const searchResults = document.getElementById('searchResults');
-        searchResults.style.display = 'none';
-    }
+    // Search functionality removed - using visual grid instead
 
     addPredefinedItem(item) {
         const quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
@@ -193,6 +164,42 @@ class PricingCalculator {
         document.getElementById('itemSearch').value = '';
         
         this.showNotification(`Added ${quantity}x ${item.name}`, 'success');
+    }
+
+    // Product grid methods
+    addProductToCart(productIndex) {
+        const product = this.predefinedItems[productIndex];
+        const quantity = parseInt(document.getElementById(`qty-${productIndex}`).textContent) || 1;
+        
+        const newItem = {
+            id: Date.now(),
+            name: product.name,
+            price: product.price,
+            quantity: quantity,
+            total: product.price * quantity
+        };
+
+        this.items.push(newItem);
+        this.updateDisplay();
+        
+        this.showNotification(`Added ${quantity}x ${product.name}`, 'success');
+        
+        // Reset quantity to 1
+        document.getElementById(`qty-${productIndex}`).textContent = '1';
+    }
+
+    increaseQuantity(productIndex) {
+        const quantityDisplay = document.getElementById(`qty-${productIndex}`);
+        const currentQty = parseInt(quantityDisplay.textContent) || 1;
+        const newQty = Math.min(currentQty + 1, 99); // Max 99
+        quantityDisplay.textContent = newQty;
+    }
+
+    decreaseQuantity(productIndex) {
+        const quantityDisplay = document.getElementById(`qty-${productIndex}`);
+        const currentQty = parseInt(quantityDisplay.textContent) || 1;
+        const newQty = Math.max(currentQty - 1, 1); // Min 1
+        quantityDisplay.textContent = newQty;
     }
 
     updateDisplay() {
