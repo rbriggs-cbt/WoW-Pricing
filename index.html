@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widdle Off-Woad Pricing Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Quick Pricing">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Widdle Off-Woad Pricing</h1>
+            <div class="total-display">
+                <span class="total-label">Total:</span>
+                <span class="total-amount" id="totalAmount">$0.00</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Quick Item Lookup -->
+            <section class="lookup-section">
+                <h2>Quick Item Lookup</h2>
+                <div class="search-container">
+                    <input type="text" id="itemSearch" placeholder="Search for an item..." autocomplete="off">
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+            </section>
+
+            <!-- Add Item Section -->
+            <section class="add-item-section">
+                <h2>Add Item</h2>
+                <div class="form-group">
+                    <input type="text" id="itemName" placeholder="Item name" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="itemPrice" placeholder="Price" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="itemQuantity" placeholder="Quantity" min="1" value="1">
+                </div>
+                <button id="addItemBtn" class="btn btn-primary">Add Item</button>
+            </section>
+
+            <!-- Items List -->
+            <section class="items-section">
+                <h2>Items (<span id="itemCount">0</span>)</h2>
+                <div class="items-list" id="itemsList">
+                    <div class="empty-state">
+                        <p>No items added yet</p>
+                        <p>Add items above or search for quick pricing</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="actions-section">
+                <button id="clearAllBtn" class="btn btn-secondary">Clear All</button>
+                <button id="newSaleBtn" class="btn btn-primary">New Sale</button>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
